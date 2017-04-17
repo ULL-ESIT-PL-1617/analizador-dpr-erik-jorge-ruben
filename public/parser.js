@@ -37,7 +37,8 @@
     RESERVED_WORD = {
       p: "P",
       "if": "IF",
-      then: "THEN"
+      then: "THEN",
+      procedure: "PROCEDURE"
     };
     make = function(type, value) {
       return {
@@ -96,9 +97,16 @@
   };
 
   var parse = function(input) {
-    var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
+    //var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
+    var program, block, statement, condition, expression, term, factor, lookahead, match, tokens, constantes ,variables, procedures;
+    constantes = [];
+    variables = [];
+    procedures = [];
+
     tokens = input.tokens();
     lookahead = tokens.shift();
+
+    //Equivalente a accept y nextsym
     match = function(t) {
       if (lookahead.type === t) {
         lookahead = tokens.shift();
@@ -109,7 +117,8 @@
         throw ("Syntax Error. Expected " + t + " found '") + lookahead.value + "' near '" + input.substr(lookahead.from) + "'";
       }
     };
-    
+
+/**
     expression = function() {
       var result, right, type;
       result = term();
@@ -164,10 +173,58 @@
       }
       return result;
     };
+*/
 
-    tree = expression(input);
+    block = function () {
+      var result;
+      result = [];
+      if (lookahead.type === "CONS"){
+        match ("CONS");
+        do {
+          var name = lookahead.value;
+          match ("ID");
+          match ("=");
+          var valor = lookahead.value;
+          match ("NUM");
+          constantes[name]= valor;
+        } while (match (","))
+        match (";");
+        var toAddResult = {type : "const",
+        right : constantes};
+        result.push (toAddResult);
+      }
+      if (lookahead.type === "VAR"){
+        match ("CONS");
+        do {
+          var name = lookahead.value;
+          match ("ID");
+          variables[name]= null;
+        } while (match (","))
+        match (";");
+        var toAddResult = {type : "var",
+        right : variables};
+        result.push (toAddResult);
+      }
+      while (lookahead && lookahead.type === "PROCEDURE"){
+
+        var procName = lookahead.value;
+        match ("ID");
+        match (";");
+        var right = block();
+        var thisProc = {type: "proc", lef: procName, right: right}
+        procedures.push(thisProc);
+        match (";");
+      }
+      var addProcToResul = {type: "procedures",
+      right: procedures};
+      result.push(addProcToResul);
+      result.push(statement());
+      return result;
+    }
+    program = block(input);
+    // Detectamos si lookahead es null, equivalente a encontrar end of input
     if (lookahead != null) {
       throw "Syntax Error parsing statements. " + "Expected 'end of input' and found '" + input.substr(lookahead.from) + "'";
     }
-    return tree;
+    return program;
   };
