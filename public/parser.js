@@ -38,7 +38,9 @@
       p: "P",
       "if": "IF",
       then: "THEN",
-      procedure: "PROCEDURE"
+      procedure: "PROCEDURE",
+      "var": "VAR",
+      "const":"CONST"
     };
     make = function(type, value) {
       return {
@@ -178,32 +180,47 @@
     block = function () {
       var result;
       result = [];
-      if (lookahead.type === "CONS"){
-        match ("CONS");
-        do {
+      console.log(lookahead.type);
+      if (lookahead.type === "CONST"){
+        match ("CONST");
+        var name = lookahead.value;
+        match ("ID");
+        match ("=");
+        var valor = lookahead.value;
+        match ("NUM");
+        constantes[name]= valor;
+        while (lookahead.type ===",") {
+          match (",")
           var name = lookahead.value;
           match ("ID");
           match ("=");
           var valor = lookahead.value;
           match ("NUM");
           constantes[name]= valor;
-        } while (match (","))
+        }
         match (";");
-        var toAddResult = {type : "const",
-        right : constantes};
-        result.push (toAddResult);
+        console.log(constantes);
+        //var toAddResult = {type : "const",
+        //right : constantes};
+        //result.push (toAddResult);
       }
+      console.log(lookahead.type === "VAR");
       if (lookahead.type === "VAR"){
-        match ("CONS");
-        do {
+        match ("VAR");
+        var name = lookahead.value;
+        match ("ID");
+        variables[name]= "null";
+        while (lookahead.type === ",") {
+          match (",")
           var name = lookahead.value;
           match ("ID");
-          variables[name]= null;
-        } while (match (","))
+          variables[name]= "null";
+        }
         match (";");
-        var toAddResult = {type : "var",
-        right : variables};
-        result.push (toAddResult);
+        console.log(variables);
+        //var toAddResult = {type : "var",
+        //right : variables.toString()};
+        //result.push (toAddResult);
       }
       while (lookahead && lookahead.type === "PROCEDURE"){
 
@@ -218,7 +235,7 @@
       var addProcToResul = {type: "procedures",
       right: procedures};
       result.push(addProcToResul);
-      result.push(statement());
+      //result.push(statement());
       return result;
     }
     program = block(input);
