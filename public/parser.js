@@ -40,7 +40,9 @@
       then: "THEN",
       procedure: "PROCEDURE",
       "var": "VAR",
-      "const":"CONST"
+      "const":"CONST",
+      "begin":"BEGIN",
+      "end": "END"
     };
     make = function(type, value) {
       return {
@@ -100,11 +102,7 @@
 
   var parse = function(input) {
     //var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
-    var program, block, statement, condition, expression, term, factor, lookahead, match, tokens, constantes ,variables, procedures;
-    constantes = [];
-    variables = [];
-    procedures = [];
-
+    var program, block, statement, condition, expression, term, factor, lookahead, match, tokens;
     tokens = input.tokens();
     lookahead = tokens.shift();
 
@@ -177,10 +175,33 @@
     };
 */
 
+    statement = function () {
+
+      var result = {};
+      console.log(lookahead.type);
+      if ( lookahead.type === "ID") {
+        var left = lookahead.value;
+        match ("ID");
+        match ("=");
+        var right = lookahead.value; //Pendiente de implementar expression;
+        match ("NUM");
+        result = {type: "=", left: left ,right: right };
+      } else if (lookahead.type === "BEGIN") {
+        match ("BEGIN")
+        result = statement();
+
+      }
+      match (";");
+      return result;
+
+
+    };
+
     block = function () {
       var result;
-      result = [];
-      console.log(lookahead.type);
+      var constantes = {};
+      var variables = {};
+      result = {};
       if (lookahead.type === "CONST"){
         match ("CONST");
         var name = lookahead.value;
@@ -199,12 +220,8 @@
           constantes[name]= valor;
         }
         match (";");
-        console.log(constantes);
-        //var toAddResult = {type : "const",
-        //right : constantes};
-        //result.push (toAddResult);
+        result ["const"] = constantes;
       }
-      console.log(lookahead.type === "VAR");
       if (lookahead.type === "VAR"){
         match ("VAR");
         var name = lookahead.value;
@@ -217,25 +234,18 @@
           variables[name]= "null";
         }
         match (";");
-        console.log(variables);
-        //var toAddResult = {type : "var",
-        //right : variables.toString()};
-        //result.push (toAddResult);
+        result ["vars"] = variables;
       }
       while (lookahead && lookahead.type === "PROCEDURE"){
-
+        match ("PROCEDURE")
         var procName = lookahead.value;
         match ("ID");
         match (";");
         var right = block();
-        var thisProc = {type: "proc", lef: procName, right: right}
-        procedures.push(thisProc);
         match (";");
+        result [procName] = {type: "procedure", block: right}
       }
-      var addProcToResul = {type: "procedures",
-      right: procedures};
-      result.push(addProcToResul);
-      //result.push(statement());
+      result ["statement"] = statement();
       return result;
     }
     program = block(input);
