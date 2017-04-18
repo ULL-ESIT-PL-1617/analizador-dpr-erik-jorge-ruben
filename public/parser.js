@@ -42,7 +42,10 @@
       "var": "VAR",
       "const":"CONST",
       "begin":"BEGIN",
-      "end": "END"
+      "end": "END",
+      "call": "CALL",
+      "while": "WHILE",
+      "do": "DO"
     };
     make = function(type, value) {
       return {
@@ -176,6 +179,7 @@
 */
 
     statement = function () {
+      var counter = 1;
 
       var result = {};
       console.log(lookahead.type);
@@ -188,10 +192,33 @@
         result = {type: "=", left: left ,right: right };
       } else if (lookahead.type === "BEGIN") {
         match ("BEGIN")
-        result = statement();
-
+        result ["statement" + counter++] = statement();
+        while (lookahead.type === ";"){
+          match (";");
+          result ["statement" + counter++] = statement();
+        }
+        match ("END");
+      } else if (lookahead.type === "CALL") {
+        match ("CALL");
+        result = {type: "call", right: lookahead.value }
+        match ("ID");
+      } else if (lookahead.type === "IF"){
+        match ("IF");
+        //var cond = condidition();
+        var cond = lookahead.value; //pendiente de implementar condición
+        match ("ID"); // quitar cuando condition esté implementado
+        match ("THEN");
+        var th = statement();
+        result = {type: "if", condition: cond, then: th};
+      } else if (lookahead.type === "WHILE"){
+        match ("WHILE");
+        //var cond = condidition();
+        var cond = lookahead.value; //pendiente de implementar condición
+        match ("ID"); // quitar cuando condition esté implementado
+        match ("DO");
+        var th = statement();
+        result = {type: "while", condition: cond, do: th};
       }
-      match (";");
       return result;
 
 
