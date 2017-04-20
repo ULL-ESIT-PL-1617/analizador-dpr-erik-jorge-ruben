@@ -183,21 +183,40 @@ factor = function() {
   var result;
   result = null;
   if (lookahead.type === "NUM") {
+    var value = lookahead.value;
     result = {
       type: "NUM",
-      value: lookahead.value
+      value: value
     };
     match("NUM");
+    if (lookahead && lookahead.type === "MULTOP"){
+      result = {
+        type: lookahead.type,
+        value: value,
+        right: term()
+      };
+    } else if (lookahead && lookahead.type === "ADDOP"){
+      result = {
+        type: lookahead.type,
+        value: value,
+        right: expression()
+      };
+    }
   } else if (lookahead.type === "ID") {
+    var value = lookahead.value;
     result = {
       type: "ID",
-      value: lookahead.value
+      value: value
     };
     match("ID");
   } else if (lookahead.type === "(") {
     match("(");
     result = expression();
     match(")");
+  } else if (lookahead.type === "MULTOP") {
+    result = term()
+  } else if (lookahead.type === "ADDOP") {
+    result = expression()
   } else {
     throw "Syntax Error. Expected number or identifier or '(' but found " + (lookahead ? lookahead.value : "end of input") + " near '" + input.substr(lookahead.from) + "'";
   }
@@ -206,8 +225,8 @@ factor = function() {
 
 term = function () {
   var result = {};
-  if (lookahead.type === "/" || lookahead.type === "*"){
-    var operation = lookahead.type;
+  if (lookahead.type === "MULTOP"){
+    var operation = lookahead.value;
     match (lookahead.type);
     result = {type: operation, right: term()};
   } else {
@@ -217,8 +236,9 @@ term = function () {
 }
 expression = function () {
   var result = {};
-  if (lookahead.type === "+" || lookahead.type === "-"){
-    var operation = lookahead.type;
+  if (lookahead.type === "ADDOP"){
+    var operation = lookahead.value;
+    console.log( operation );
     match (lookahead.type);
     result = {type: operation, right: expression()};
   } else {
@@ -251,8 +271,9 @@ statement = function () {
     var left = lookahead.value;
     match ("ID");
     match ("=");
-    var right = lookahead.value; //Pendiente de implementar expression;
-    match ("NUM");
+    var right = expression();
+    //var right = lookahead.value; //Pendiente de implementar expression;
+    //match ("NUM");
     result = {type: "=", left: left ,right: right };
   } else if (lookahead.type === "BEGIN") {
     match ("BEGIN")
@@ -268,17 +289,17 @@ statement = function () {
     match ("ID");
   } else if (lookahead.type === "IF"){
     match ("IF");
-    //var cond = condidition();
-    var cond = lookahead.value; //pendiente de implementar condición
-    match ("ID"); // quitar cuando condition esté implementado
+    var cond = condidition();
+    //var cond = lookahead.value; //pendiente de implementar condición
+    //match ("ID"); // quitar cuando condition esté implementado
     match ("THEN");
     var th = statement();
     result = {type: "if", condition: cond, then: th};
   } else if (lookahead.type === "WHILE"){
     match ("WHILE");
-    //var cond = condidition();
-    var cond = lookahead.value; //pendiente de implementar condición
-    match ("ID"); // quitar cuando condition esté implementado
+    var cond = condition();
+    //var cond = lookahead.value; //pendiente de implementar condición
+    //match ("ID"); // quitar cuando condition esté implementado
     match ("DO");
     var th = statement();
     result = {type: "while", condition: cond, do: th};
@@ -293,6 +314,7 @@ block = function () {
   var constantes = {};
   var variables = {};
   result = {};
+
   if (lookahead.type === "CONST"){
     match ("CONST");
     var name = lookahead.value;
@@ -336,7 +358,9 @@ block = function () {
     match (";");
     result [procName] = {type: "procedure", block: right}
   }
-  result ["statement"] = statement();
+  if (lookahead){
+    result ["statement"] = statement();
+  }
   return result;
 }
 program = block(input);
