@@ -60,3 +60,24 @@ factor --> ident aux
           | "(" expression ")"
 aux -->  ("+"|"-") expression
         | ("*"|"/") term  
+
+### Ejemplo de código
+~~~
+var x, squ;
+
+procedure square;
+begin
+  squ = 1 * 1
+end;
+
+begin
+  x = 1;
+  if a < 10 then b = 5;
+  while odd x do
+  begin
+     call square;
+     call squ;
+     x = x + ( x * x)
+  end
+end
+~~~
