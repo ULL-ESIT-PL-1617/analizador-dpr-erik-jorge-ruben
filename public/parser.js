@@ -198,7 +198,7 @@ factor = function() {
     } else if (lookahead && lookahead.type === "ADDOP"){
       result = {
         type: lookahead.type,
-        value: value,
+        left: value,
         right: expression()
       };
     }
@@ -209,6 +209,19 @@ factor = function() {
       value: value
     };
     match("ID");
+    if (lookahead && lookahead.type === "MULTOP"){
+      result = {
+        type: lookahead.type,
+        value: value,
+        right: term()
+      };
+    } else if (lookahead && lookahead.type === "ADDOP"){
+      result = {
+        type: lookahead.type,
+        left: value,
+        right: expression()
+      };
+    }
   } else if (lookahead.type === "(") {
     match("(");
     result = expression();
@@ -230,7 +243,7 @@ term = function () {
     match (lookahead.type);
     result = {type: operation, right: term()};
   } else {
-    result = {type: "value", right: factor() };
+    result = factor()
   }
   return result;
 }
@@ -242,7 +255,7 @@ expression = function () {
     match (lookahead.type);
     result = {type: operation, right: expression()};
   } else {
-    result = {type: "value", right: term() };
+    result = term()
   }
   return result;
 }
@@ -289,7 +302,7 @@ statement = function () {
     match ("ID");
   } else if (lookahead.type === "IF"){
     match ("IF");
-    var cond = condidition();
+    var cond = condition();
     //var cond = lookahead.value; //pendiente de implementar condición
     //match ("ID"); // quitar cuando condition esté implementado
     match ("THEN");
@@ -359,7 +372,7 @@ block = function () {
     result [procName] = {type: "procedure", block: right}
   }
   if (lookahead){
-    result ["statement"] = statement();
+    result ["statements"] = statement();
   }
   return result;
 }

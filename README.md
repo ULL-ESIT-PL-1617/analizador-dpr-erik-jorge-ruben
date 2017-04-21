@@ -18,14 +18,14 @@
 
 ### Hitos
 
-1. Use el repo de GitHub dado por la asignación de esta tarea. 
+1. Use el repo de GitHub dado por la asignación de esta tarea.
 2. Separe las clases `UnderlinedCell`, `TexCell`, etc. en distintos ficheros exportando los objetos adecuados
 3. Reescriba las clases usando ECMA6
 4. Añada pruebas para cada una de las clases `UnderlinedCell`, `TexCell`, etc
 5. Añada integración continua usando Travis
 6. Añada a su `README.md` un badge Travis como este:
 [![Build Status](https://travis-ci.org/crguezl/mocha-chai-sinon--example.svg?branch=travis)](https://travis-ci.org/crguezl/mocha-chai-sinon--example)
-indicando el estado de las pruebas en Travis y enlazando a las mismas. 
+indicando el estado de las pruebas en Travis y enlazando a las mismas.
 7. Entrege los enlaces al repo en GitHub y a Travis
 
 
@@ -36,3 +36,27 @@ indicando el estado de las pruebas en Travis y enlazando a las mismas.
 * [Apuntes: Pruebas. Should](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/apuntes/pruebas/mocha.html#shouldl)
 * [Apuntes: Integración Contínua. Travis](https://casianorodriguezleon.gitbooks.io/ull-esit-1617/content/apuntes/pruebas/travis.html)
 * [node-sass-middleware](https://github.com/sass/node-sass-middleware/blob/master/README.md)
+
+
+### Gramática
+
+program --> block "EOI".
+block --> ("const" ident "=" numbe ("," ident = number)* ";")?
+          ("var" ident ("," ident) ";")?
+          ("procedure" ident ";" block ";") statement.
+statement --> ident "=" expression
+              | "call" ident
+              | "begin" statement (";" statement)* "end"
+              | "if" condition "then" statement
+              | "while" condition "do" statement .
+condition --> "odd" expression
+              | expression ("="|"#"|"<"|"<="|">"|">=") expression .
+expression --> ("+"|"-") expression
+               | term .
+term --> ("*"|"/") term
+          | factor .
+factor --> ident aux
+          | number aux
+          | "(" expression ")"
+aux -->  ("+"|"-") expression
+        | ("*"|"/") term  
