@@ -1,4 +1,4 @@
-(function() {
+/*(function() {
   var assert;
 
   assert = chai.assert;
@@ -24,4 +24,29 @@
       assert.throws(() => parse('3 + (4+2))'), /Syntax\s+Error/i);
     });
   });
+}).call(this);*/
+
+
+(function() {
+  var chai = require('chai');
+  var expect = require('chai').expect;
+  var should = require('chai').should;
+  var assert = require('chai').assert;
+  
+  describe('Parser', function() {  
+    describe('parse()', function() {
+        it('should return positive value of given negative number', function() {
+            expect(Math.abs(-5)).to.be.equal(5);
+        });
+
+        it('should return positive value of given positive number', function() {
+            expect(Math.abs(3)).to.be.equal(3);
+        });
+
+        it('should return 0 given 0', function() {
+            expect(Math.abs(0)).to.be.equal(0);
+        });
+    });
+});
+
 }).call(this);
