@@ -15,17 +15,24 @@
     test('Multiplications are parsed correctly', () => {
       var result = parse('4*2');
       console.log(result);
-      assert.deepEqual(result, {type: "*", 
-                                left: { type: "NUM", value: 4}, 
+      assert.deepEqual(result, {type: "*",
+                                left: { type: "NUM", value: 4},
                                 right: {type: "NUM", value: 2}
       });
     });
+    test('Probando asignación', () => {
+      var result = parse('a = 5');
+      console.log(result);
+      assert.deepEqual(result, {type: "=",
+                                left: "a",
+                                right: {type: "NUM", value: 5}
+      });
+    });
     test('Bad expressions throw exceptions', () => {
-      assert.throws(() => parse('3 + (4+2))'), /Syntax\s+Error/i);
+      assert.throws(() => parse('4 + 2'), /Syntax\s+Error/i);
     });
   });
 }).call(this);*/
-
 
 (function() {
   var chai = require('chai');

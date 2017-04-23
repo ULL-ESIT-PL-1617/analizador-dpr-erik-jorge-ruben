@@ -36,5 +36,8 @@
   "bugs": {
     "url": "https://github.com/ULL-ESIT-PL-1617/parser-pdr-example/issues"
   },
-  "homepage": "https://github.com/alu0100204148/analizadordpr"
+  "homepage": "https://github.com/alu0100204148/analizadordpr",
+  "scripts": {
+    "test": "mocha ./public/tests.js"
+  }
 }
