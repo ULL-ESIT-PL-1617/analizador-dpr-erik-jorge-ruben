@@ -39,19 +39,13 @@
   var expect = require('chai').expect;
   var should = require('chai').should;
   var assert = require('chai').assert;
+  var parser = require('../parser.js');
   
   describe('Parser', function() {  
     describe('parse()', function() {
-        it('should return positive value of given negative number', function() {
-            expect(Math.abs(-5)).to.be.equal(5);
-        });
-
-        it('should return positive value of given positive number', function() {
-            expect(Math.abs(3)).to.be.equal(3);
-        });
-
-        it('should return 0 given 0', function() {
-            expect(Math.abs(0)).to.be.equal(0);
+        it('El método parse debería devolver un objeto', function() {
+            var result = parser.parse('var prueba;');
+            expect(result).to.be.an('object');
         });
     });
 });
