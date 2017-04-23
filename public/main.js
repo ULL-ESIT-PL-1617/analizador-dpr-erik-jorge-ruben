@@ -17,6 +17,6 @@
   window.onload = function() {
     return PARSE.onclick = main;
   };
-  
+
 
 }).call(this);

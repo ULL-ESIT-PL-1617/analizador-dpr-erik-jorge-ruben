@@ -1,4 +1,6 @@
 //(function() {
+  (function(exports) {
+  "use strict";
   var root = this;
   Object.constructor.prototype.error = function(message, t) {
     t = t || this;
@@ -106,8 +108,7 @@
     return result;
   };
 
-  (function(exports) {
-  "use strict";
+  
     var parse = function(input) {
       //var condition, expression, factor, lookahead, match, statement, statements, term, tokens, tree;
       var program, block, statement, condition, expression, term, factor, lookahead, match, tokens;
