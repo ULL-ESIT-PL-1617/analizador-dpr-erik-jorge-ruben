@@ -4,7 +4,7 @@
   "description": "Analizador DPR",
   "main": "app.js",
   "directories": {
-    "test": "mocha public/test"
+    "test": "mocha"
   },
   "dependencies": {
     "body-parser": "*",
@@ -38,6 +38,6 @@
   },
   "homepage": "https://github.com/alu0100204148/analizadordpr",
   "scripts": {
-    "test": "mocha ./public/tests.js"
+    "test": "mocha public/test"
   }
 }
