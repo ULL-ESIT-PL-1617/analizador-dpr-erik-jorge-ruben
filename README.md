@@ -25,7 +25,7 @@
 | Nobre                        | Enlace |
 | ---------------------------- | ------ |
 | Jorge Alonso Hernández       |        |
-| Erik Andreas Barreto de Vera |        |
+| Erik Andreas Barreto de Vera | https://calm-mountain-45398.herokuapp.com       |
 | Rubén Labrador Páez          |        |
 
 * [Campus PL1617: Práctica: Evaluar Analizador Descendente Predictivo Recursivo](https://campusvirtual.ull.es/1617/mod/assign/view.php?id=195888)
