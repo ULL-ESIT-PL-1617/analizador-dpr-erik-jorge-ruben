@@ -20,11 +20,11 @@
 | Erik Andreas Barreto de Vera | [Erik](https://campusvirtual.ull.es/1617/user/view.php?id=18906&course=1148) | [alu0100774054](https://github.com/alu0100774054) |
 | Rubén Labrador Páez          | [Rubén](https://campusvirtual.ull.es/1617/user/view.php?id=9476&course=1148) | [alu0100309553](https://github.com/alu0100309553) |
 
-## Despliegue Heroku 
+## Despliegue Heroku
 
 | Nobre                        | Enlace |
 | ---------------------------- | ------ |
-| Jorge Alonso Hernández       |        |
+| Jorge Alonso Hernández       | https://evening-ridge-19178.herokuapp.com/     |
 | Erik Andreas Barreto de Vera | https://calm-mountain-45398.herokuapp.com       |
 | Rubén Labrador Páez          |        |
 
